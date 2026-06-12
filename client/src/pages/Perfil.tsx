@@ -208,11 +208,11 @@ export default function Perfil() {
         <main className="container py-8">
           <div className="grid gap-8 lg:grid-cols-[1fr_1.2fr]">
             <div>
-              <div className="relative h-96 overflow-hidden rounded-3xl border border-white/10">
+              <div className="relative overflow-hidden rounded-3xl border border-white/10" style={{ maxHeight: '100vh' }}>
                 <img
                   src={getProfileImageUrl(perfil)}
                   alt={`${perfil.nome} em ${perfil.cidade}`}
-                  className="h-full w-full object-cover"
+                  className="w-full h-auto object-contain"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/10" />
                 <span className="absolute left-5 top-5 rounded-full border border-white/15 bg-black/45 px-4 py-2 text-xs font-bold uppercase tracking-[0.22em] text-white backdrop-blur">
