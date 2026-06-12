@@ -251,14 +251,14 @@ export default function Perfil() {
             <div className="flex flex-col gap-6">
               
               {/* Galeria de Fotos */}
-              <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-black/40 aspect-[3/4] group">
+              <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-black/40 group">
                 {/* Foto Principal */}
-                <div className="relative w-full h-full">
+                <div className="relative w-full">
                   <img
                     key={`foto-${fotoAtual}`}
                     src={getProfileImageUrl(perfil, fotoAtual)}
                     alt={`${perfil.nome} - Foto ${fotoAtual}`}
-                    className="w-full h-full object-contain animate-fade-in"
+                    className="w-full h-auto block animate-fade-in"
                     onError={(e) => {
                       const target = e.currentTarget;
                       target.onerror = null;
@@ -266,7 +266,7 @@ export default function Perfil() {
                     }}
                     onLoad={() => handleFotoCarregada(fotoAtual - 1)}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20" />
+                  <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black/70 to-transparent" />
                 </div>
 
                 {/* Botões de Navegação */}
