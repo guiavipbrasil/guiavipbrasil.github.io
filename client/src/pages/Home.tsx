@@ -89,11 +89,7 @@ export default function Home() {
                 <div className="stat-card"><strong>{totalTrans}</strong><span>trans</span></div>
               </div>
             </div>
-            <div className="hero-card">
-              <Sparkles className="h-9 w-9 text-accent" />
-              <h3>Experiência atualizada</h3>
-              <p>Imagens locais, rotas corrigidas para GitHub Pages e visual premium com cards responsivos.</p>
-            </div>
+
           </div>
         </div>
       </section>
@@ -132,7 +128,7 @@ export default function Home() {
         ) : perfisFiltrados.length === 0 ? (
           <div className="empty-state"><p>Nenhum perfil encontrado para sua busca.</p></div>
         ) : (
-          <div className="grid grid-cols-1 gap-7 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-7 md:grid-cols-2">
             {perfisFiltrados.map((perfil) => (
               <Link key={perfil.id} href={`/${perfil.url_amigavel}`}>
                 <a className="profile-card group cursor-pointer">
