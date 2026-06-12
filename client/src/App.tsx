@@ -12,7 +12,7 @@ function Router() {
   return (
     <Switch>
       <Route path={"/"} component={Home} />
-      <Route path={"/:url"} component={Perfil} />
+      <Route path={"/:url_amigavel"} component={Perfil} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
