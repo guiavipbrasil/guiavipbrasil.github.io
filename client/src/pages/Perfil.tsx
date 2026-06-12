@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { useParams, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, MessageCircle, X, Send, MapPin, ShieldCheck, Clock, Sparkles } from "lucide-react";
+import { ArrowLeft, MessageCircle, X, Send, MapPin, ShieldCheck, Clock } from "lucide-react";
 import { MetaTags } from "@/components/MetaTags";
+import { profileExtensions } from "../profileExtensions";
 
 interface Perfil {
   id: number;
@@ -16,7 +17,10 @@ interface Perfil {
 
 type Mensagem = { tipo: "usuario" | "assistente"; texto: string };
 
-const getProfileImageUrl = (perfil: Perfil) => `/profile-images/profile-${perfil.id}.svg`;
+const getProfileImageUrl = (perfil: Perfil) => {
+  const ext = profileExtensions[perfil.id] || ".svg";
+  return `/profile-images/profile-${perfil.id}${ext}`;
+};
 
 const normalizar = (texto: string) =>
   texto

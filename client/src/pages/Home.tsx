@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Search, ShieldCheck, Sparkles, MapPin } from "lucide-react";
+import { profileExtensions } from "../profileExtensions";
 
 interface Perfil {
   id: number;
@@ -13,7 +14,10 @@ interface Perfil {
   url_amigavel: string;
 }
 
-const getProfileImageUrl = (perfil: Perfil) => `/profile-images/profile-${perfil.id}.svg`;
+const getProfileImageUrl = (perfil: Perfil) => {
+  const ext = profileExtensions[perfil.id] || ".svg";
+  return `/profile-images/profile-${perfil.id}${ext}`;
+};
 
 export default function Home() {
   const [perfis, setPerfis] = useState<Perfil[]>([]);
