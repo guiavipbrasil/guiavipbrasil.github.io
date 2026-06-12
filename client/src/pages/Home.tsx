@@ -166,7 +166,7 @@ export default function Home() {
                       src={getProfileImageUrl(perfil)}
                       alt={`${perfil.nome} em ${perfil.cidade}`}
                       loading="lazy"
-                      className="profile-image group-hover:scale-105"
+                      className="profile-image group-hover:scale-105 object-contain"
                       onError={(e) => {
                         const target = e.currentTarget;
                         target.onerror = null;

@@ -258,7 +258,7 @@ export default function Perfil() {
                     key={`foto-${fotoAtual}`}
                     src={getProfileImageUrl(perfil, fotoAtual)}
                     alt={`${perfil.nome} - Foto ${fotoAtual}`}
-                    className="w-full h-full object-cover animate-fade-in"
+                    className="w-full h-full object-contain animate-fade-in"
                     onError={(e) => {
                       const target = e.currentTarget;
                       target.onerror = null;
