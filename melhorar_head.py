@@ -10,8 +10,7 @@ old_head = '''<head>
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1" />
     <title>Guia VIP Brasil</title>
-    <script src="https://quge5.com/88/tag.min.js" data-zone="248874" async data-cfasync="false"></script>
-    <script src="https://pl29718960.effectivecpmnetwork.com/93/cc/a9/93cca95fcf8777285dbf3301f4d19ff8.js"></script>    
+
     <!-- THIS IS THE START OF A COMMENT BLOCK, BLOCK TO BE DELETED: Google Fonts here, example:
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -52,8 +51,6 @@ new_head = '''<head>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
     <!-- Analytics -->
-    <script src="https://quge5.com/88/tag.min.js" data-zone="248874" async data-cfasync="false"></script>
-    <script src="https://pl29718960.effectivecpmnetwork.com/93/cc/a9/93cca95fcf8777285dbf3301f4d19ff8.js"></script>
 
     <script type="module" crossorigin src="/assets/index-CGX1ROXh.js"></script>
     <link rel="stylesheet" crossorigin href="/assets/index-D_hUvo7i.css">
