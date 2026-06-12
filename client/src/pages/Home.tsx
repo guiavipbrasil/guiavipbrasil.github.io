@@ -1,8 +1,7 @@
-import { useState, useEffect } from "react";
-import { Link } from "wouter";
+import { useState, useMemo } from "react";
+import { MapPin, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Search, ShieldCheck, Sparkles, MapPin } from "lucide-react";
-import { profileExtensions } from "../profileExtensions";
+import { Link } from "wouter";
 
 interface Perfil {
   id: number;
@@ -14,22 +13,18 @@ interface Perfil {
   url_amigavel: string;
 }
 
-const getProfileImageUrl = (perfil: Perfil) => {
-  const ext = profileExtensions[perfil.id] || ".svg";
-  return `/profile-images/profile-${perfil.id}${ext}`;
-};
-
 export default function Home() {
-  const [perfis, setPerfis] = useState<Perfil[]>([]);
+  const [perfisFiltrados, setPerfisFiltrados] = useState<Perfil[]>([]);
+  const [carregando, setCarregando] = useState(true);
   const [filtro, setFiltro] = useState<"todos" | "feminina" | "trans">("todos");
   const [busca, setBusca] = useState("");
-  const [carregando, setCarregando] = useState(true);
 
-  useEffect(() => {
+  // Carregar perfis
+  React.useEffect(() => {
     fetch("/perfis.json")
       .then((res) => res.json())
-      .then((data) => {
-        setPerfis(data);
+      .then((data: Perfil[]) => {
+        setPerfisFiltrados(data);
         setCarregando(false);
       })
       .catch((err) => {
@@ -38,100 +33,111 @@ export default function Home() {
       });
   }, []);
 
-  const perfisFiltrados = perfis.filter((perfil) => {
-    const filtroCategoria = filtro === "todos" || perfil.categoria === filtro;
-    const termo = busca.trim().toLowerCase();
-    const filtroBusca =
-      termo.length === 0 ||
-      perfil.nome.toLowerCase().includes(termo) ||
-      perfil.cidade.toLowerCase().includes(termo) ||
-      perfil.descricao.toLowerCase().includes(termo);
+  // Filtrar perfis
+  const perfisExibidos = useMemo(() => {
+    return perfisFiltrados.filter((perfil) => {
+      const atendeFiltro =
+        filtro === "todos" || perfil.categoria === filtro;
+      const atendeBusca =
+        busca === "" ||
+        perfil.nome.toLowerCase().includes(busca.toLowerCase()) ||
+        perfil.cidade.toLowerCase().includes(busca.toLowerCase()) ||
+        perfil.descricao.toLowerCase().includes(busca.toLowerCase());
+      return atendeFiltro && atendeBusca;
+    });
+  }, [perfisFiltrados, filtro, busca]);
 
-    return filtroCategoria && filtroBusca;
-  });
+  const contadores = {
+    total: perfisFiltrados.length,
+    femininas: perfisFiltrados.filter((p) => p.categoria === "feminina").length,
+    trans: perfisFiltrados.filter((p) => p.categoria === "trans").length,
+  };
 
-  const totalFemininas = perfis.filter((p) => p.categoria === "feminina").length;
-  const totalTrans = perfis.filter((p) => p.categoria === "trans").length;
+  const getProfileImageUrl = (perfil: Perfil): string => {
+    const baseUrl = "/profile-images/";
+    return baseUrl + perfil.foto_original;
+  };
 
   return (
-    <div className="site-shell min-h-screen">
-      <header className="hero-gradient border-b border-white/10 py-20 text-center">
-        <div className="container">
-          <p className="eyebrow mb-4">Curadoria premium em todo o Brasil</p>
-          <h1 className="hero-title mb-6">Guia VIP Brasil</h1>
-          <p className="hero-subtitle mb-10">Perfis organizados por cidade e categoria</p>
-          
-          <div className="flex flex-wrap justify-center gap-6">
-            <div className="stat-card">
-              <span className="stat-value">{perfis.length}</span>
-              <span className="stat-label">perfis</span>
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-40">
+        <div className="container mx-auto max-w-6xl px-4 py-8">
+          <div className="text-center mb-8">
+            <p className="text-xs font-semibold tracking-widest text-accent uppercase mb-2">
+              Curadoria Premium em Todo o Brasil
+            </p>
+            <h1 className="text-4xl md:text-5xl font-bold mb-2">Guia VIP Brasil</h1>
+            <p className="text-muted-foreground">Perfis organizados por cidade e categoria</p>
+          </div>
+
+          {/* Stats */}
+          <div className="grid grid-cols-3 gap-4 mb-8">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-accent">{contadores.total}</div>
+              <div className="text-xs text-muted-foreground uppercase tracking-wide">Perfis</div>
             </div>
-            <div className="stat-card">
-              <span className="stat-value">{totalFemininas}</span>
-              <span className="stat-label">femininas</span>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-amber-400">{contadores.femininas}</div>
+              <div className="text-xs text-muted-foreground uppercase tracking-wide">Femininas</div>
             </div>
-            <div className="stat-card">
-              <span className="stat-value">{totalTrans}</span>
-              <span className="stat-label">trans</span>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-pink-400">{contadores.trans}</div>
+              <div className="text-xs text-muted-foreground uppercase tracking-wide">Trans</div>
             </div>
+          </div>
+
+          {/* Search */}
+          <div className="relative mb-6">
+            <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+            <input
+              type="text"
+              placeholder="Buscar por nome, cidade ou descrição..."
+              value={busca}
+              onChange={(e) => setBusca(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 bg-muted border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-accent"
+            />
+          </div>
+
+          {/* Filters */}
+          <div className="flex gap-2 flex-wrap">
+            <span className="text-sm text-muted-foreground self-center">Filtrar:</span>
+            {[
+              { label: `Todos (${contadores.total})`, value: "todos" },
+              { label: `Femininas (${contadores.femininas})`, value: "feminina" },
+              { label: `Trans (${contadores.trans})`, value: "trans" },
+            ].map((f) => (
+              <button
+                key={f.value}
+                onClick={() => setFiltro(f.value as any)}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  filtro === f.value
+                    ? "bg-accent text-accent-foreground"
+                    : "bg-muted text-muted-foreground hover:bg-muted/80"
+                }`}
+              >
+                {f.label}
+              </button>
+            ))}
           </div>
         </div>
       </header>
 
-      <section className="sticky top-0 z-10 border-b border-white/10 bg-black/35 backdrop-blur-md">
-        <div className="container py-6">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div className="search-box">
-              <Search className="h-4 w-4 text-muted-foreground" />
-              <input
-                value={busca}
-                onChange={(e) => setBusca(e.target.value)}
-                placeholder="Buscar por nome, cidade ou descrição..."
-                className="w-full bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
-              />
-            </div>
-
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="mr-1 text-sm font-semibold text-muted-foreground">Filtrar:</span>
-              <Button
-                variant={filtro === "todos" ? "default" : "outline"}
-                onClick={() => setFiltro("todos")}
-                className="rounded-full"
-              >
-                Todos ({perfis.length})
-              </Button>
-              <Button
-                variant={filtro === "feminina" ? "default" : "outline"}
-                onClick={() => setFiltro("feminina")}
-                className="rounded-full"
-              >
-                Femininas ({totalFemininas})
-              </Button>
-              <Button
-                variant={filtro === "trans" ? "default" : "outline"}
-                onClick={() => setFiltro("trans")}
-                className="rounded-full"
-              >
-                Trans ({totalTrans})
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="container py-12">
+      {/* Main Content */}
+      <main className="container mx-auto max-w-6xl px-4 py-12">
         {carregando ? (
-          <div className="empty-state">
-            <p>Carregando perfis...</p>
+          <div className="text-center py-12">
+            <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-muted border-t-accent"></div>
+            <p className="mt-4 text-muted-foreground">Carregando perfis...</p>
           </div>
-        ) : perfisFiltrados.length === 0 ? (
-          <div className="empty-state">
-            <p>Nenhum perfil encontrado para sua busca.</p>
+        ) : perfisExibidos.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground">Nenhum perfil encontrado com os filtros selecionados.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-7 md:grid-cols-2">
-            {perfisFiltrados.map((perfil) => (
-              <Link key={perfil.id} href={`/${perfil.url_amigavel}/`}>
+            {perfisExibidos.map((perfil) => (
+              <Link key={perfil.id} href={`/${perfil.url_amigavel}`}>
                 <a className="profile-card group cursor-pointer">
                   <div className="relative h-72 overflow-hidden bg-muted">
                     <img
@@ -161,36 +167,7 @@ export default function Home() {
             ))}
           </div>
         )}
-      </section>
-
-      {/* Rodapé Profissional */}
-      <footer className="border-t border-white/10 bg-black/60 backdrop-blur py-12 mt-16">
-        <div className="container">
-          <div className="grid gap-8 md:grid-cols-3 mb-8">
-            <div>
-              <h3 className="text-lg font-bold text-foreground mb-3">Guia VIP Brasil</h3>
-              <p className="text-sm text-muted-foreground">Portal premium de acompanhantes de luxo em todo o Brasil. Discrição e profissionalismo garantidos.</p>
-            </div>
-            <div>
-              <h4 className="text-sm font-bold text-accent mb-3 uppercase">Informações</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-accent transition-colors">Termos de Uso</a></li>
-                <li><a href="#" className="hover:text-accent transition-colors">Política de Privacidade</a></li>
-                <li><a href="#" className="hover:text-accent transition-colors">Contato</a></li>
-              </ul>
-            </div>
-            <div>
-              <div className="rounded-lg border border-red-500/30 bg-red-500/10 p-4">
-                <p className="text-xs font-bold text-red-400 uppercase tracking-wider mb-2">⚠️ Aviso Importante</p>
-                <p className="text-xs text-red-300">Este site é destinado exclusivamente a maiores de 18 anos. Ao acessar, você confirma ser maior de idade.</p>
-              </div>
-            </div>
-          </div>
-          <div className="border-t border-white/10 pt-8">
-            <p className="text-center text-xs text-muted-foreground">© 2026 Guia VIP Brasil. Todos os direitos reservados. | Conteúdo adulto - Proibido para menores de 18 anos.</p>
-          </div>
-        </div>
-      </footer>
+      </main>
     </div>
   );
 }
