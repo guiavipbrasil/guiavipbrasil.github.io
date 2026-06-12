@@ -33,58 +33,76 @@ const sugestoes = [
   "Qual cidade atende?",
   "Como funciona o contato?",
   "Quero saber mais sobre discrição",
-  "Falar no WhatsApp",
+  "Qual é o valor?",
+  "Como é o atendimento?",
 ];
 
 function gerarResposta(perfil: Perfil, mensagem: string) {
   const texto = normalizar(mensagem);
   const saudacao = `Olá! Sou o assistente virtual de ${perfil.nome}.`;
 
-  if (/\b(oi|ola|olá|bom dia|boa tarde|boa noite|e ai|e aí)\b/.test(texto)) {
-    return `${saudacao} Posso ajudar com informações sobre localização, disponibilidade, discrição, perfil e próximos passos para contato.`;
+  if (/\b(oi|ola|olá|bom dia|boa tarde|boa noite|e ai|e aí|opa|e aew|oie)\b/.test(texto)) {
+    return `${saudacao} Bem-vindo! Posso responder dúvidas sobre localização (${perfil.cidade}), disponibilidade, valores, atendimento, discrição e como entrar em contato. O que você gostaria de saber?`;
   }
 
-  if (texto.includes("cidade") || texto.includes("local") || texto.includes("onde") || texto.includes("endereco") || texto.includes("endereço")) {
-    return `${perfil.nome} está listada em ${perfil.cidade}. Para combinar detalhes específicos, use o contato do perfil e informe o melhor período para atendimento.`;
+  if (texto.includes("cidade") || texto.includes("local") || texto.includes("onde") || texto.includes("endereco") || texto.includes("endereço") || texto.includes("localizacao") || texto.includes("localização")) {
+    return `${perfil.nome} atende em ${perfil.cidade}. Para confirmar se faz atendimento em bairros específicos ou cidades próximas, envie uma mensagem com sua localização.`;
   }
 
-  if (texto.includes("disponivel") || texto.includes("disponibilidade") || texto.includes("hoje") || texto.includes("agora") || texto.includes("horario") || texto.includes("horário")) {
-    return `A disponibilidade de ${perfil.nome} pode variar ao longo do dia. Recomendo enviar uma mensagem objetiva com data, horário desejado e cidade para receber confirmação mais rápida.`;
+  if (texto.includes("disponivel") || texto.includes("disponibilidade") || texto.includes("hoje") || texto.includes("agora") || texto.includes("horario") || texto.includes("horário") || texto.includes("que horas") || texto.includes("quando")) {
+    return `A disponibilidade de ${perfil.nome} varia conforme o dia. Para confirmar um horário específico, envie: a data desejada, o horário e a duração que você procura. Quanto mais antecedência, melhor!`;
   }
 
-  if (texto.includes("valor") || texto.includes("preco") || texto.includes("preço") || texto.includes("custa") || texto.includes("cache") || texto.includes("cachê")) {
-    return `Valores e condições devem ser confirmados diretamente com ${perfil.nome}. O ideal é informar duração, cidade e preferências de atendimento para receber uma resposta completa.`;
+  if (texto.includes("valor") || texto.includes("preco") || texto.includes("preço") || texto.includes("custa") || texto.includes("cache") || texto.includes("cachê") || texto.includes("quanto") || texto.includes("tabela") || texto.includes("investimento")) {
+    return `Os valores de ${perfil.nome} são competitivos e variam conforme a duração e tipo de atendimento. Para uma cotação personalizada, informe: duração desejada (1h, 2h, etc), tipo de atendimento e se é primeira vez.`;
   }
 
-  if (texto.includes("whatsapp") || texto.includes("telefone") || texto.includes("contato") || texto.includes("falar") || texto.includes("mensagem")) {
-    return `Para falar com ${perfil.nome}, envie uma mensagem clara e respeitosa pelo canal de contato disponível no perfil. Inclua seu nome, cidade, data e horário pretendidos.`;
+  if (texto.includes("atendimento") || texto.includes("o que oferece") || texto.includes("servico") || texto.includes("serviço") || texto.includes("faz o que") || texto.includes("oferece")) {
+    return `${perfil.nome} oferece atendimento VIP discreto e profissional. Os detalhes específicos dos serviços são melhor discutidos em uma conversa privada. Envie uma mensagem com suas preferências e ${perfil.nome} responderá com as opções disponíveis.`;
   }
 
-  if (texto.includes("discreto") || texto.includes("discricao") || texto.includes("discrição") || texto.includes("sigilo") || texto.includes("privacidade")) {
-    return `${perfil.nome} valoriza discrição e atendimento reservado. Evite enviar informações sensíveis desnecessárias e combine todos os detalhes com respeito e clareza.`;
+  if (texto.includes("whatsapp") || texto.includes("telefone") || texto.includes("contato") || texto.includes("falar") || texto.includes("mensagem") || texto.includes("como falo") || texto.includes("como entro em contato")) {
+    return `Para falar com ${perfil.nome}, envie uma mensagem clara, respeitosa e objetiva. Inclua: seu nome, a cidade onde você está, data e horário desejados. ${perfil.nome} responderá assim que possível com as informações completas.`;
   }
 
-  if (texto.includes("perfil") || texto.includes("sobre") || texto.includes("descricao") || texto.includes("descrição") || texto.includes("quem")) {
-    return `${perfil.nome} é um perfil ${perfil.categoria === "feminina" ? "feminino" : "trans"} em ${perfil.cidade}. Sobre: ${perfil.descricao}`;
+  if (texto.includes("discreto") || texto.includes("discricao") || texto.includes("discrição") || texto.includes("sigilo") || texto.includes("privacidade") || texto.includes("confidencial") || texto.includes("segredo")) {
+    return `${perfil.nome} valoriza muito discrição e confidencialidade. Todas as informações pessoais são tratadas com total sigilo. Evite compartilhar dados sensíveis desnecessariamente e combine tudo com discrição.`;
   }
 
-  if (texto.includes("seguro") || texto.includes("segurança") || texto.includes("seguranca") || texto.includes("golpe") || texto.includes("confiavel") || texto.includes("confiável")) {
-    return `Combine tudo com calma, confirme informações antes de qualquer deslocamento e mantenha a conversa em tom respeitoso. O Guia VIP Brasil organiza os perfis, mas detalhes finais devem ser confirmados diretamente com ${perfil.nome}.`;
+  if (texto.includes("perfil") || texto.includes("sobre") || texto.includes("descricao") || texto.includes("descrição") || texto.includes("quem") || texto.includes("quem e") || texto.includes("me fale sobre")) {
+    return `${perfil.nome} é um perfil ${perfil.categoria === "feminina" ? "feminino" : "trans"} em ${perfil.cidade}. Descrição: ${perfil.descricao}. Para saber mais detalhes ou tirar dúvidas, envie uma mensagem!`;
   }
 
-  if (texto.includes("obrigado") || texto.includes("obrigada") || texto.includes("valeu")) {
-    return `Por nada! Se precisar de mais informações sobre ${perfil.nome}, estou aqui para ajudar. Você pode também entrar em contato direto pelo WhatsApp.`;
+  if (texto.includes("seguro") || texto.includes("segurança") || texto.includes("seguranca") || texto.includes("golpe") || texto.includes("confiavel") || texto.includes("confiável") || texto.includes("pode confiar") || texto.includes("real")) {
+    return `${perfil.nome} é um perfil verificado no Guia VIP Brasil. Para sua segurança: confirme informações antes de qualquer deslocamento, mantenha a conversa respeitosa, e combine todos os detalhes com clareza.`;
   }
 
-  if (texto.includes("whatsapp") && (texto.includes("falar") || texto.includes("conversa") || texto.includes("chat"))) {
-    return `Perfeito! Clique no botão abaixo para conversar com ${perfil.nome} diretamente no WhatsApp. Assim você terá uma comunicação mais rápida e direta.`;
+  if (texto.includes("obrigado") || texto.includes("obrigada") || texto.includes("valeu") || texto.includes("obg") || texto.includes("vlw")) {
+    return `Por nada! Se tiver mais dúvidas sobre ${perfil.nome}, estou aqui para ajudar. Pergunte sobre cidade, horários, valores, atendimento ou qualquer outra informação!`;
+  }
+
+  if (texto.includes("fotos") || texto.includes("foto") || texto.includes("imagem") || texto.includes("como e") || texto.includes("aparencia")) {
+    return `As fotos no perfil de ${perfil.nome} são recentes e refletem a realidade. Para mais imagens ou detalhes visuais, entre em contato direto com ${perfil.nome}.`;
+  }
+
+  if (texto.includes("primeira vez") || texto.includes("nunca fiz") || texto.includes("inexperiente") || texto.includes("iniciante")) {
+    return `Sem problemas! ${perfil.nome} é atenciosa e sabe lidar com clientes de primeira viagem. Envie uma mensagem explicando que é sua primeira vez, e ${perfil.nome} fará tudo para que seja uma experiência confortável e memorável.`;
+  }
+
+  if (texto.includes("casal") || texto.includes("acompanhante") || texto.includes("companhia") || texto.includes("evento") || texto.includes("sair")) {
+    return `${perfil.nome} oferece atendimento VIP. Para eventos, saídas ou acompanhamento especial, envie uma mensagem com os detalhes do que você procura, data, horário e duração desejada.`;
+  }
+
+  if (texto.includes("hotel") || texto.includes("motel") || texto.includes("seu lugar") || texto.includes("meu lugar")) {
+    return `${perfil.nome} pode atender em diversos locais. Para confirmar opções de local (hotel, motel, residencial), envie uma mensagem com suas preferências e ${perfil.nome} indicará as melhores opções.`;
   }
 
   const respostasGerais = [
-    `${saudacao} Posso ajudar com cidade, disponibilidade, contato, discrição e resumo do perfil. O que você gostaria de saber primeiro?`,
-    `${perfil.nome} está em ${perfil.cidade}. Para agilizar, envie uma pergunta sobre horário, contato, valores ou detalhes do perfil.`,
-    `Entendi. Para uma resposta mais precisa, me diga se você quer saber sobre localização, disponibilidade, contato, privacidade ou características do perfil.`,
-    `Posso orientar o primeiro contato com ${perfil.nome}: seja respeitoso, informe cidade, dia, horário desejado e aguarde a confirmação.`
+    `${saudacao} Posso ajudar com informações sobre localização (${perfil.cidade}), disponibilidade, valores, tipo de atendimento, discrição e como entrar em contato. O que você gostaria de saber?`,
+    `Entendi sua pergunta! Para uma resposta mais completa, posso ajudar com: localização, horários, valores, tipos de atendimento, segurança, discrição ou detalhes do perfil de ${perfil.nome}. Qual desses interessa?`,
+    `${perfil.nome} está em ${perfil.cidade} e oferece atendimento VIP profissional. Posso responder dúvidas sobre disponibilidade, valores, atendimento, segurança e como fazer o primeiro contato.`,
+    `Boa pergunta! Para uma resposta mais precisa, me diga se você quer saber sobre: onde ${perfil.nome} atende, horários disponíveis, valores, tipo de atendimento, ou como entrar em contato.`,
+    `Posso ajudar! ${perfil.nome} está disponível para atendimento VIP em ${perfil.cidade}. Pergunte sobre horários, valores, tipos de serviço, ou como fazer contato direto.`
   ];
 
   return respostasGerais[Math.floor(Math.random() * respostasGerais.length)];
@@ -223,19 +241,6 @@ export default function Perfil() {
                 Conversar Agora
               </Button>
               <Button
-                className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold transition-all duration-300"
-                onClick={() => {
-                  const mensagem = `Olá! Gostaria de saber mais sobre seus serviços. Confira meu perfil no Guia VIP Brasil.`;
-                  const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(mensagem)}`;
-                  window.open(whatsappUrl, '_blank');
-                }}
-              >
-                <svg className="mr-2 h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.67-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421-7.403h-.004a9.87 9.87 0 00-4.947 1.227l-.355.214-.368-.06c-1.286-.264-2.514-.666-3.635-1.23l-.5-.287-.5.287c-.55.315-1.058.71-1.499 1.177-.44.467-.77 1.012-.97 1.606-.2.595-.23 1.231-.087 1.837.143.606.428 1.164.822 1.635.394.47.923.832 1.516 1.053l.482.16-.482.16c-.593.22-1.122.582-1.516 1.053-.394.47-.679 1.029-.822 1.635-.143.606-.113 1.242.087 1.837.2.594.529 1.139.97 1.606.441.467.949.862 1.499 1.177l.5.287.5-.287c1.121-.564 2.349-.966 3.635-1.23l.368-.06.355.214a9.87 9.87 0 004.947 1.227h.004c5.442 0 9.884-4.418 9.884-9.85C21.884 5.139 17.442.721 11.884.721z"/>
-                </svg>
-                Contatar no WhatsApp
-              </Button>
-              <Button
                 variant="outline"
                 className="w-full"
                 onClick={() => {
@@ -243,7 +248,7 @@ export default function Perfil() {
                   if (navigator.share) {
                     navigator.share({ title: `${perfil.nome} - Guia VIP Brasil`, text: texto, url: urlCompleta });
                   } else {
-                    navigator.clipboard?.copyText(urlCompleta);
+                    navigator.clipboard?.writeText(urlCompleta);
                     alert("Link copiado para a área de transferência.");
                   }
                 }}
@@ -279,28 +284,11 @@ export default function Perfil() {
 
           <div className="border-t border-white/10 p-4">
             <div className="mb-3 flex flex-wrap gap-2">
-              {sugestoes.map((sugestao) => {
-                if (sugestao === "Falar no WhatsApp") {
-                  return (
-                    <button
-                      key={sugestao}
-                      onClick={() => {
-                        const mensagem = `Olá! Gostaria de saber mais sobre seus serviços.`;
-                        const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(mensagem)}`;
-                        window.open(whatsappUrl, '_blank');
-                      }}
-                      className="rounded-full border border-green-500/30 bg-green-500/10 px-3 py-1 text-xs text-green-400 transition hover:border-green-500 hover:bg-green-500/20"
-                    >
-                      {sugestao}
-                    </button>
-                  );
-                }
-                return (
-                  <button key={sugestao} onClick={() => enviarMensagem(sugestao)} className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs text-muted-foreground transition hover:border-accent hover:text-foreground">
-                    {sugestao}
-                  </button>
-                );
-              })}
+              {sugestoes.map((sugestao) => (
+                <button key={sugestao} onClick={() => enviarMensagem(sugestao)} className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs text-muted-foreground transition hover:border-accent hover:text-foreground">
+                  {sugestao}
+                </button>
+              ))}
             </div>
             <div className="flex gap-2">
               <input
