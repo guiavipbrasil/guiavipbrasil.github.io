@@ -23,10 +23,15 @@ interface Perfil {
 type Mensagem = { tipo: "usuario" | "assistente"; texto: string };
 
 const PIX_GLOBAL = "58e64b53-1ab7-443b-9495-46a5bf13057d";
-const TOTAL_FOTOS = 3; // Total de fotos por perfil
+const TOTAL_FOTOS = 1; // Simplificado para apenas 1 foto principal conforme pedido do usuário
 
 const getProfileImageUrl = (perfil: Perfil, fotoIndex: number = 1) => {
   const ext = profileExtensions[perfil.id] || ".jpg";
+  // Se for a foto principal (index 1), usa o formato padrão profile-{id}{ext}
+  // Se fosse usar outras fotos, seria profile-{id}-{index}{ext}
+  if (fotoIndex === 1) {
+    return `/profile-images/profile-${perfil.id}${ext}`;
+  }
   return `/profile-images/profile-${perfil.id}-${fotoIndex}${ext}`;
 };
 
@@ -186,10 +191,12 @@ export default function Perfil() {
   };
 
   const proximaFoto = () => {
+    if (TOTAL_FOTOS <= 1) return;
     setFotoAtual((prev) => (prev === TOTAL_FOTOS ? 1 : prev + 1));
   };
 
   const fotoAnterior = () => {
+    if (TOTAL_FOTOS <= 1) return;
     setFotoAtual((prev) => (prev === 1 ? TOTAL_FOTOS : prev - 1));
   };
 
@@ -255,7 +262,7 @@ export default function Perfil() {
                     onError={(e) => {
                       const target = e.currentTarget;
                       target.onerror = null;
-                      target.src = `/profile-images/profile-${perfil.id}-1.svg`;
+                      target.src = `/profile-images/profile-${perfil.id}.svg`;
                     }}
                     onLoad={() => handleFotoCarregada(fotoAtual - 1)}
                   />
@@ -281,17 +288,19 @@ export default function Perfil() {
                 )}
 
                 {/* Indicador de Foto */}
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
-                  {Array.from({ length: TOTAL_FOTOS }).map((_, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => setFotoAtual(idx + 1)}
-                      className={`h-2 rounded-full transition-all ${
-                        idx + 1 === fotoAtual ? "bg-accent w-6" : "bg-white/30 w-2 hover:bg-white/50"
-                      }`}
-                    />
-                  ))}
-                </div>
+                {TOTAL_FOTOS > 1 && (
+                  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                    {Array.from({ length: TOTAL_FOTOS }).map((_, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => setFotoAtual(idx + 1)}
+                        className={`h-2 rounded-full transition-all ${
+                          idx + 1 === fotoAtual ? "bg-accent w-6" : "bg-white/30 w-2 hover:bg-white/50"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                )}
 
                 {/* Badge de Categoria */}
                 <div className="absolute left-4 top-4 flex items-center gap-2 rounded-full border border-white/15 bg-black/50 px-3 py-1.5 backdrop-blur">
@@ -302,9 +311,11 @@ export default function Perfil() {
                 </div>
 
                 {/* Contador de Fotos */}
-                <div className="absolute right-4 top-4 bg-black/60 px-3 py-1.5 rounded-full text-xs font-bold text-accent">
-                  {fotoAtual}/{TOTAL_FOTOS}
-                </div>
+                {TOTAL_FOTOS > 1 && (
+                  <div className="absolute right-4 top-4 bg-black/60 px-3 py-1.5 rounded-full text-xs font-bold text-accent">
+                    {fotoAtual}/{TOTAL_FOTOS}
+                  </div>
+                )}
               </div>
 
               {/* Chat Box */}
@@ -342,254 +353,172 @@ export default function Perfil() {
                         type="text"
                         value={inputMensagem}
                         onChange={(e) => setInputMensagem(e.target.value)}
-                        onKeyDown={(e) => e.key === "Enter" && enviarMensagem()}
+                        onKeyPress={(e) => e.key === "Enter" && enviarMensagem()}
                         placeholder="Escreva algo sexy..."
-                        className="flex-1 bg-white/5 border border-white/10 rounded-full px-4 py-2 text-sm outline-none focus:border-accent"
+                        className="flex-1 bg-white/5 border border-white/10 rounded-full px-4 py-2 text-sm focus:outline-none focus:border-accent/50"
                       />
-                      <button 
-                        onClick={() => enviarMensagem()}
-                        className="bg-accent text-accent-foreground rounded-full p-2 hover:opacity-90 transition-opacity"
-                      >
-                        <Send className="h-4 w-4" />
-                      </button>
+                      <Button onClick={() => enviarMensagem()} className="rounded-full h-10 w-10 p-0 btn-primary">
+                        <SendIcon className="h-4 w-4" />
+                      </Button>
                     </div>
                   </div>
                 </div>
               )}
-
-              {!chatAberto && (
-                <Button 
-                  onClick={() => setChatAberto(true)}
-                  className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-bold py-3"
-                >
-                  <MessageCircle className="mr-2 h-5 w-5" />
-                  Abrir Chat
-                </Button>
-              )}
             </div>
 
-            {/* Coluna Direita - Informações e CTA */}
+            {/* Coluna Direita - Informações */}
             <div className="flex flex-col gap-6">
-              
-              {/* Header do Perfil */}
-              <div>
-                <p className="eyebrow mb-2">Perfil Premium</p>
-                <div className="flex items-center gap-3 mb-4">
-                  <h1 className="text-5xl font-bold text-foreground" style={{ fontFamily: "'Playfair Display', serif" }}>
-                    {perfil.nome}
-                  </h1>
-                  <div className="flex items-center gap-1 rounded-full bg-gradient-to-r from-yellow-500 to-amber-500 px-3 py-1 text-xs font-bold text-black uppercase tracking-wider">
-                    <span>✓</span>
-                    <span>Verificado</span>
+              <div className="rounded-3xl border border-white/10 bg-black/40 p-8 backdrop-blur-sm">
+                <div className="flex items-center justify-between mb-6">
+                  <div className="space-y-1">
+                    <p className="text-xs font-bold uppercase tracking-widest text-accent">Perfil Premium</p>
+                    <h1 className="text-4xl font-bold tracking-tight text-foreground font-playfair">{perfil.nome}</h1>
+                  </div>
+                  <div className="flex items-center gap-1.5 bg-accent/10 px-3 py-1 rounded-full border border-accent/20">
+                    <Check className="h-3.5 w-3.5 text-accent" />
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-accent">Verificado</span>
                   </div>
                 </div>
-                <div className="accent-line" />
-              </div>
 
-              {/* Descrição */}
-              <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
-                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-accent mb-3">Sobre</p>
-                <p className="leading-7 text-foreground/90 text-lg">{perfil.descricao}</p>
-              </div>
+                <div className="space-y-6">
+                  <section>
+                    <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3 flex items-center gap-2">
+                      <Heart className="h-3 w-3 text-accent" /> Sobre
+                    </h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      {perfil.descricao}
+                    </p>
+                  </section>
 
-              {/* Info Cards */}
-              <div className="grid gap-3 sm:grid-cols-2">
-                <div className="info-card">
-                  <MapPin className="h-5 w-5 text-accent" />
-                  <span>Localização</span>
-                  <strong>{perfil.cidade}</strong>
-                </div>
-                <div className="info-card">
-                  <Heart className="h-5 w-5 text-accent" />
-                  <span>Categoria</span>
-                  <strong>{perfil.categoria === "feminina" ? "Feminina" : "Trans"}</strong>
-                </div>
-              </div>
-
-              {/* Tabela de Valores */}
-              {perfil.valores && (
-                <div className="rounded-3xl border-2 border-accent/40 bg-gradient-to-br from-accent/10 to-accent/5 p-6 shadow-lg shadow-accent/20">
-                  <p className="mb-5 text-center text-sm font-bold uppercase tracking-[0.2em] text-accent">💎 Tabela de Valores</p>
-                  <div className="grid gap-3 sm:grid-cols-3">
-                    <div className="rounded-2xl border-2 border-accent/30 bg-accent/15 p-5 text-center hover:scale-105 transition-transform hover:border-accent/60">
-                      <p className="text-xs font-bold text-accent uppercase tracking-wider">30 Minutos</p>
-                      <p className="mt-3 text-3xl font-black text-foreground">R$ {perfil.valores["30min"]}</p>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="rounded-2xl border border-white/5 bg-white/5 p-4">
+                      <div className="flex items-center gap-2 mb-1 text-muted-foreground">
+                        <MapPin className="h-3.5 w-3.5" />
+                        <span className="text-[10px] font-bold uppercase tracking-wider">Localização</span>
+                      </div>
+                      <p className="text-sm font-semibold text-foreground">{perfil.cidade}</p>
                     </div>
-                    <div className="rounded-2xl border-2 border-accent/30 bg-accent/15 p-5 text-center hover:scale-105 transition-transform hover:border-accent/60">
-                      <p className="text-xs font-bold text-accent uppercase tracking-wider">1 Hora</p>
-                      <p className="mt-3 text-3xl font-black text-foreground">R$ {perfil.valores["1hora"]}</p>
-                    </div>
-                    <div className="rounded-2xl border-2 border-accent/30 bg-accent/15 p-5 text-center hover:scale-105 transition-transform hover:border-accent/60">
-                      <p className="text-xs font-bold text-accent uppercase tracking-wider">2 Horas</p>
-                      <p className="mt-3 text-3xl font-black text-foreground">R$ {perfil.valores["2horas"]}</p>
+                    <div className="rounded-2xl border border-white/5 bg-white/5 p-4">
+                      <div className="flex items-center gap-2 mb-1 text-muted-foreground">
+                        <Heart className="h-3.5 w-3.5" />
+                        <span className="text-[10px] font-bold uppercase tracking-wider">Categoria</span>
+                      </div>
+                      <p className="text-sm font-semibold text-foreground">
+                        {perfil.categoria === "feminina" ? "Feminina" : "Trans"}
+                      </p>
                     </div>
                   </div>
+
+                  {/* PIX Section */}
+                  <div className="rounded-2xl border border-accent/20 bg-accent/5 p-6 relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform">
+                      <ShieldCheck className="h-12 w-12" />
+                    </div>
+                    <div className="flex items-center gap-2 mb-4">
+                      <div className="h-8 w-8 rounded-full bg-accent/20 flex items-center justify-center">
+                        <Clock className="h-4 w-4 text-accent" />
+                      </div>
+                      <h3 className="font-bold text-foreground">Pix para Confirmar</h3>
+                    </div>
+                    
+                    <div className="space-y-4">
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Chave PIX</label>
+                        <div className="flex items-center gap-2 bg-black/40 border border-white/10 rounded-xl px-4 py-3 font-mono text-xs text-foreground">
+                          <span className="flex-1 truncate">{PIX_GLOBAL}</span>
+                        </div>
+                      </div>
+                      
+                      <Button onClick={copiarPix} className="w-full btn-primary h-12 rounded-xl flex items-center justify-center gap-2">
+                        {pixCopiadoGlobal ? (
+                          <>
+                            <Check className="h-4 w-4" />
+                            <span>Copiado!</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="h-4 w-4" />
+                            <span>Copiar Chave PIX</span>
+                          </>
+                        )}
+                      </Button>
+                    </div>
+                  </div>
+
+                  <section className="rounded-2xl border border-white/5 bg-white/5 p-6">
+                    <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3 flex items-center gap-2">
+                      <Clock className="h-3 w-3 text-accent" /> Como Funciona
+                    </h3>
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      Escolha o valor desejado, mande o PIX e confirme o encontro. Quanto mais você gasta, mais diversão! 🔥
+                    </p>
+                  </section>
+
+                  <div className="flex flex-col gap-3">
+                    <Button onClick={() => setFormAberto(true)} className="w-full bg-white/5 hover:bg-white/10 border border-white/10 text-foreground h-12 rounded-xl flex items-center justify-center gap-2">
+                      <Mail className="h-4 w-4" />
+                      <span>Formulário de Contato</span>
+                    </Button>
+                    <Button onClick={() => {
+                      navigator.clipboard.writeText(urlCompleta);
+                      alert("Link copiado!");
+                    }} className="w-full bg-white/5 hover:bg-white/10 border border-white/10 text-foreground h-12 rounded-xl flex items-center justify-center gap-2">
+                      <Send className="h-4 w-4" />
+                      <span>Compartilhar Perfil</span>
+                    </Button>
+                  </div>
                 </div>
-              )}
-
-              {/* PIX em Destaque */}
-              <div className="rounded-3xl border-2 border-emerald-500/60 bg-gradient-to-r from-emerald-600/20 to-emerald-500/10 p-6 shadow-lg shadow-emerald-500/20">
-                <p className="mb-4 text-center text-lg font-bold uppercase tracking-[0.2em] text-emerald-400">💰 Pix para Confirmar</p>
-                <div className="bg-black/40 rounded-2xl p-4 border border-emerald-500/30 mb-4">
-                  <p className="text-xs text-muted-foreground mb-2 uppercase tracking-wider">Chave PIX</p>
-                  <p className="text-sm font-mono text-foreground break-all">{PIX_GLOBAL}</p>
-                </div>
-                <Button 
-                  onClick={copiarPix}
-                  className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 flex items-center justify-center gap-2"
-                >
-                  {pixCopiadoGlobal ? (
-                    <>
-                      <Check className="h-5 w-5" />
-                      PIX Copiado!
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="h-5 w-5" />
-                      Copiar Chave PIX
-                    </>
-                  )}
-                </Button>
-              </div>
-
-              {/* Dica para Contato */}
-              <div className="rounded-2xl border border-white/10 bg-black/25 p-5 text-sm leading-7 text-muted-foreground">
-                <div className="mb-2 flex items-center gap-2 font-semibold text-foreground">
-                  <Clock className="h-4 w-4 text-accent" />
-                  Como Funciona
-                </div>
-                Escolha o valor desejado, mande o PIX e confirme o encontro. Quanto mais você gasta, mais diversão! 🔥
-              </div>
-
-              {/* Botões de Ação */}
-              <div className="flex flex-col gap-3 mt-auto">
-                
-                {/* Telegram */}
-                {perfil.telegram && (
-                  <a 
-                    href={`https://t.me/${perfil.telegram}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full btn-primary text-center flex items-center justify-center gap-2 py-3 font-bold"
-                  >
-                    <SendIcon className="h-5 w-5" />
-                    Contatar via Telegram
-                  </a>
-                )}
-
-                {/* Email */}
-                {perfil.email && (
-                  <a 
-                    href={`mailto:${perfil.email}`}
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-colors flex items-center justify-center gap-2"
-                  >
-                    <Mail className="h-5 w-5" />
-                    Enviar Email
-                  </a>
-                )}
-
-                {/* Formulário */}
-                <Button 
-                  onClick={() => setFormAberto(true)}
-                  className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3"
-                >
-                  <MessageCircle className="mr-2 h-5 w-5" />
-                  Formulário de Contato
-                </Button>
-
-                {/* Compartilhar */}
-                <Button
-                  variant="outline"
-                  className="w-full border-white/20 hover:bg-white/5"
-                  onClick={() => {
-                    const texto = `Confira ${perfil.nome} no Guia VIP Brasil`;
-                    if (navigator.share) {
-                      navigator.share({ title: `${perfil.nome} - Guia VIP Brasil`, text: texto, url: urlCompleta });
-                    }
-                  }}
-                >
-                  Compartilhar Perfil
-                </Button>
               </div>
             </div>
+
           </div>
         </main>
+      </div>
 
-        {/* Modal - Formulário */}
-        {formAberto && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-            <div className="w-full max-w-md rounded-3xl border border-white/10 bg-black/80 p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-2xl font-bold text-foreground">Enviar Mensagem</h3>
-                <button onClick={() => setFormAberto(false)} className="text-muted-foreground hover:text-foreground">
-                  <X className="h-5 w-5" />
-                </button>
+      {/* Modal de Formulário */}
+      {formAberto && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+          <div className="w-full max-w-md rounded-3xl border border-white/10 bg-background p-8">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold font-playfair">Falar com {perfil.nome}</h2>
+              <button onClick={() => setFormAberto(false)} className="text-muted-foreground hover:text-foreground transition-colors">
+                <X className="h-6 w-6" />
+              </button>
+            </div>
+            <div className="space-y-4">
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Seu Nome</label>
+                <input
+                  type="text"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-accent/50"
+                  placeholder="Como posso te chamar?"
+                />
               </div>
-
-              <div className="space-y-4">
-                <div>
-                  <label className="text-sm font-semibold text-muted-foreground mb-2 block">Seu Nome</label>
-                  <input
-                    type="text"
-                    value={formData.nome}
-                    onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
-                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-sm outline-none focus:border-accent"
-                    placeholder="Seu nome"
-                  />
-                </div>
-
-                <div>
-                  <label className="text-sm font-semibold text-muted-foreground mb-2 block">Seu Email</label>
-                  <input
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-sm outline-none focus:border-accent"
-                    placeholder="seu@email.com"
-                  />
-                </div>
-
-                <div>
-                  <label className="text-sm font-semibold text-muted-foreground mb-2 block">Mensagem</label>
-                  <textarea
-                    value={formData.mensagem}
-                    onChange={(e) => setFormData({ ...formData, mensagem: e.target.value })}
-                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-sm outline-none focus:border-accent resize-none"
-                    placeholder="Sua mensagem aqui..."
-                    rows={4}
-                  />
-                </div>
-
-                <Button 
-                  onClick={() => {
-                    if (!formData.nome || !formData.email || !formData.mensagem) {
-                      alert("Preencha todos os campos");
-                      return;
-                    }
-                    alert(`Mensagem enviada para ${perfil?.nome}! Você receberá uma resposta em breve.`);
-                    setFormAberto(false);
-                    setFormData({ nome: "", email: "", mensagem: "" });
-                  }}
-                  className="w-full btn-primary py-3 font-bold"
-                >
-                  Enviar Mensagem
-                </Button>
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">E-mail ou Telegram</label>
+                <input
+                  type="text"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-accent/50"
+                  placeholder="Para eu te responder..."
+                />
               </div>
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Mensagem</label>
+                <textarea
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-accent/50 min-h-[100px]"
+                  placeholder="O que você quer fazer comigo?"
+                />
+              </div>
+              <Button onClick={() => {
+                alert("Mensagem enviada! Aguarde meu retorno...");
+                setFormAberto(false);
+              }} className="w-full btn-primary h-12 rounded-xl">
+                Enviar Mensagem 🔥
+              </Button>
             </div>
           </div>
-        )}
-
-        {/* CSS para animação de fade */}
-        <style>{`
-          @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-          }
-          .animate-fade-in {
-            animation: fadeIn 0.3s ease-in-out;
-          }
-        `}</style>
-      </div>
+        </div>
+      )}
     </>
   );
 }
