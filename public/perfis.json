@@ -6,7 +6,15 @@
     "cidade": "São Paulo",
     "descricao": "Acompanhante exclusiva para momentos especiais.",
     "foto_original": "3e1ed949-f074-434a-8322-31ebe0ec19a4.jpeg",
-    "url_amigavel": "perfil-alessandra-1"
+    "url_amigavel": "perfil-alessandra-1",
+    "telegram": "alessandra_vip",
+    "email": "alessandra@guiavipbrasil.com",
+    "valores": {
+      "30min": 150,
+      "1hora": 280,
+      "2horas": 500
+    },
+    "pix_chave": "alessandra@guiavip"
   },
   {
     "id": 2,
@@ -15,7 +23,15 @@
     "cidade": "Rio de Janeiro",
     "descricao": "Elegante e sofisticada, sempre pronta para experiências inesquecíveis.",
     "foto_original": "62466377-5bb1-4623-adfd-d70c351ac794.jpeg",
-    "url_amigavel": "perfil-beatriz-2"
+    "url_amigavel": "perfil-beatriz-2",
+    "telegram": "beatriz_vip",
+    "email": "beatriz@guiavipbrasil.com",
+    "valores": {
+      "30min": 150,
+      "1hora": 280,
+      "2horas": 500
+    },
+    "pix_chave": "beatriz@guiavip"
   },
   {
     "id": 3,
@@ -24,7 +40,15 @@
     "cidade": "Belo Horizonte",
     "descricao": "Profissional dedicada ao seu bem-estar e satisfação.",
     "foto_original": "GRraWmaXAAEfnzy.jpg",
-    "url_amigavel": "perfil-camila-3"
+    "url_amigavel": "perfil-camila-3",
+    "telegram": "camila_vip",
+    "email": "camila@guiavipbrasil.com",
+    "valores": {
+      "30min": 150,
+      "1hora": 280,
+      "2horas": 500
+    },
+    "pix_chave": "camila@guiavip"
   },
   {
     "id": 4,
@@ -33,7 +57,15 @@
     "cidade": "Brasília",
     "descricao": "Discreta, educada e com total comprometimento.",
     "foto_original": "acompanhantesdeluxosp-cacaumuniz_100.webp",
-    "url_amigavel": "perfil-daniela-4"
+    "url_amigavel": "perfil-daniela-4",
+    "telegram": "daniela_vip",
+    "email": "daniela@guiavipbrasil.com",
+    "valores": {
+      "30min": 150,
+      "1hora": 280,
+      "2horas": 500
+    },
+    "pix_chave": "daniela@guiavip"
   },
   {
     "id": 5,
@@ -42,7 +74,15 @@
     "cidade": "Salvador",
     "descricao": "Oferecendo momentos de luxo e conforto.",
     "foto_original": "acompanhantesdeluxosp-cacaumuniz_21-768x492.webp",
-    "url_amigavel": "perfil-elisa-5"
+    "url_amigavel": "perfil-elisa-5",
+    "telegram": "elisa_vip",
+    "email": "elisa@guiavipbrasil.com",
+    "valores": {
+      "30min": 150,
+      "1hora": 280,
+      "2horas": 500
+    },
+    "pix_chave": "elisa@guiavip"
   },
   {
     "id": 6,
@@ -51,7 +91,15 @@
     "cidade": "Fortaleza",
     "descricao": "Atenciosa e carismática, pronta para surpreender.",
     "foto_original": "blog-lexi-3.jpg",
-    "url_amigavel": "perfil-fernanda-6"
+    "url_amigavel": "perfil-fernanda-6",
+    "telegram": "fernanda_vip",
+    "email": "fernanda@guiavipbrasil.com",
+    "valores": {
+      "30min": 150,
+      "1hora": 280,
+      "2horas": 500
+    },
+    "pix_chave": "fernanda@guiavip"
   },
   {
     "id": 7,
@@ -60,7 +108,15 @@
     "cidade": "Manaus",
     "descricao": "Experiência de classe alta e discrição garantida.",
     "foto_original": "c36fdabeb30fed89770927eefa18dc0f.jpg",
-    "url_amigavel": "perfil-gabriela-7"
+    "url_amigavel": "perfil-gabriela-7",
+    "telegram": "gabriela_vip",
+    "email": "gabriela@guiavipbrasil.com",
+    "valores": {
+      "30min": 150,
+      "1hora": 280,
+      "2horas": 500
+    },
+    "pix_chave": "gabriela@guiavip"
   },
   {
     "id": 8,
@@ -69,7 +125,15 @@
     "cidade": "Recife",
     "descricao": "Profissional qualificada para acompanhamento VIP.",
     "foto_original": "c7241d657261689a23671d505f113a1d_high.webp",
-    "url_amigavel": "perfil-helena-8"
+    "url_amigavel": "perfil-helena-8",
+    "telegram": "helena_vip",
+    "email": "helena@guiavipbrasil.com",
+    "valores": {
+      "30min": 150,
+      "1hora": 280,
+      "2horas": 500
+    },
+    "pix_chave": "helena@guiavip"
   },
   {
     "id": 9,
@@ -78,7 +142,15 @@
     "cidade": "Porto Alegre",
     "descricao": "Dedicada a proporcionar momentos memoráveis.",
     "foto_original": "images (1).jpeg",
-    "url_amigavel": "perfil-isabela-9"
+    "url_amigavel": "perfil-isabela-9",
+    "telegram": "isabela_vip",
+    "email": "isabela@guiavipbrasil.com",
+    "valores": {
+      "30min": 150,
+      "1hora": 280,
+      "2horas": 500
+    },
+    "pix_chave": "isabela@guiavip"
   },
   {
     "id": 10,
@@ -87,7 +159,15 @@
     "cidade": "Curitiba",
     "descricao": "Elegância, beleza e profissionalismo em um só lugar.",
     "foto_original": "images (10).jpeg",
-    "url_amigavel": "perfil-juliana-10"
+    "url_amigavel": "perfil-juliana-10",
+    "telegram": "juliana_vip",
+    "email": "juliana@guiavipbrasil.com",
+    "valores": {
+      "30min": 150,
+      "1hora": 280,
+      "2horas": 500
+    },
+    "pix_chave": "juliana@guiavip"
   },
   {
     "id": 11,
@@ -96,7 +176,15 @@
     "cidade": "Guarulhos",
     "descricao": "Acompanhante exclusiva para momentos especiais.",
     "foto_original": "images (11).jpeg",
-    "url_amigavel": "perfil-karina-11"
+    "url_amigavel": "perfil-karina-11",
+    "telegram": "karina_vip",
+    "email": "karina@guiavipbrasil.com",
+    "valores": {
+      "30min": 150,
+      "1hora": 280,
+      "2horas": 500
+    },
+    "pix_chave": "karina@guiavip"
   },
   {
     "id": 12,
@@ -105,7 +193,15 @@
     "cidade": "Campinas",
     "descricao": "Elegante e sofisticada, sempre pronta para experiências inesquecíveis.",
     "foto_original": "images (12).jpeg",
-    "url_amigavel": "perfil-larissa-12"
+    "url_amigavel": "perfil-larissa-12",
+    "telegram": "larissa_vip",
+    "email": "larissa@guiavipbrasil.com",
+    "valores": {
+      "30min": 150,
+      "1hora": 280,
+      "2horas": 500
+    },
+    "pix_chave": "larissa@guiavip"
   },
   {
     "id": 13,
@@ -114,7 +210,15 @@
     "cidade": "Santos",
     "descricao": "Profissional dedicada ao seu bem-estar e satisfação.",
     "foto_original": "images (13).jpeg",
-    "url_amigavel": "perfil-mariana-13"
+    "url_amigavel": "perfil-mariana-13",
+    "telegram": "mariana_vip",
+    "email": "mariana@guiavipbrasil.com",
+    "valores": {
+      "30min": 150,
+      "1hora": 280,
+      "2horas": 500
+    },
+    "pix_chave": "mariana@guiavip"
   },
   {
     "id": 14,
@@ -123,7 +227,15 @@
     "cidade": "Sorocaba",
     "descricao": "Discreta, educada e com total comprometimento.",
     "foto_original": "images (14).jpeg",
-    "url_amigavel": "perfil-natália-14"
+    "url_amigavel": "perfil-natália-14",
+    "telegram": "natalia_vip",
+    "email": "natalia@guiavipbrasil.com",
+    "valores": {
+      "30min": 150,
+      "1hora": 280,
+      "2horas": 500
+    },
+    "pix_chave": "natália@guiavip"
   },
   {
     "id": 15,
@@ -132,7 +244,15 @@
     "cidade": "Ribeirão Preto",
     "descricao": "Oferecendo momentos de luxo e conforto.",
     "foto_original": "images (15).jpeg",
-    "url_amigavel": "perfil-olivia-15"
+    "url_amigavel": "perfil-olivia-15",
+    "telegram": "olivia_vip",
+    "email": "olivia@guiavipbrasil.com",
+    "valores": {
+      "30min": 150,
+      "1hora": 280,
+      "2horas": 500
+    },
+    "pix_chave": "olivia@guiavip"
   },
   {
     "id": 16,
@@ -141,7 +261,15 @@
     "cidade": "Goiânia",
     "descricao": "Atenciosa e carismática, pronta para surpreender.",
     "foto_original": "images (16).jpeg",
-    "url_amigavel": "perfil-patrícia-16"
+    "url_amigavel": "perfil-patrícia-16",
+    "telegram": "patricia_vip",
+    "email": "patricia@guiavipbrasil.com",
+    "valores": {
+      "30min": 150,
+      "1hora": 280,
+      "2horas": 500
+    },
+    "pix_chave": "patrícia@guiavip"
   },
   {
     "id": 17,
@@ -150,7 +278,15 @@
     "cidade": "Belém",
     "descricao": "Experiência de classe alta e discrição garantida.",
     "foto_original": "images (17).jpeg",
-    "url_amigavel": "perfil-quézia-17"
+    "url_amigavel": "perfil-quézia-17",
+    "telegram": "quezia_vip",
+    "email": "quezia@guiavipbrasil.com",
+    "valores": {
+      "30min": 150,
+      "1hora": 280,
+      "2horas": 500
+    },
+    "pix_chave": "quézia@guiavip"
   },
   {
     "id": 18,
@@ -159,7 +295,15 @@
     "cidade": "Maceió",
     "descricao": "Elegante e sofisticada, sempre pronta para experiências inesquecíveis.",
     "foto_original": "images (18).jpeg",
-    "url_amigavel": "perfil-adriana-18"
+    "url_amigavel": "perfil-adriana-18",
+    "telegram": "adriana_vip",
+    "email": "adriana@guiavipbrasil.com",
+    "valores": {
+      "30min": 150,
+      "1hora": 280,
+      "2horas": 500
+    },
+    "pix_chave": "adriana@guiavip"
   },
   {
     "id": 19,
@@ -168,7 +312,15 @@
     "cidade": "Teresina",
     "descricao": "Profissional dedicada ao seu bem-estar e satisfação.",
     "foto_original": "images (19).jpeg",
-    "url_amigavel": "perfil-bruna-19"
+    "url_amigavel": "perfil-bruna-19",
+    "telegram": "bruna_vip",
+    "email": "bruna@guiavipbrasil.com",
+    "valores": {
+      "30min": 150,
+      "1hora": 280,
+      "2horas": 500
+    },
+    "pix_chave": "bruna@guiavip"
   },
   {
     "id": 20,
@@ -177,7 +329,15 @@
     "cidade": "João Pessoa",
     "descricao": "Discreta, educada e com total comprometimento.",
     "foto_original": "images (2).jpeg",
-    "url_amigavel": "perfil-cecília-20"
+    "url_amigavel": "perfil-cecília-20",
+    "telegram": "cecilia_vip",
+    "email": "cecilia@guiavipbrasil.com",
+    "valores": {
+      "30min": 150,
+      "1hora": 280,
+      "2horas": 500
+    },
+    "pix_chave": "cecília@guiavip"
   },
   {
     "id": 21,
@@ -186,7 +346,15 @@
     "cidade": "Natal",
     "descricao": "Oferecendo momentos de luxo e conforto.",
     "foto_original": "images (20).jpeg",
-    "url_amigavel": "perfil-diana-21"
+    "url_amigavel": "perfil-diana-21",
+    "telegram": "diana_vip",
+    "email": "diana@guiavipbrasil.com",
+    "valores": {
+      "30min": 150,
+      "1hora": 280,
+      "2horas": 500
+    },
+    "pix_chave": "diana@guiavip"
   },
   {
     "id": 22,
@@ -195,7 +363,15 @@
     "cidade": "Aracaju",
     "descricao": "Atenciosa e carismática, pronta para surpreender.",
     "foto_original": "images (21).jpeg",
-    "url_amigavel": "perfil-emilia-22"
+    "url_amigavel": "perfil-emilia-22",
+    "telegram": "emilia_vip",
+    "email": "emilia@guiavipbrasil.com",
+    "valores": {
+      "30min": 150,
+      "1hora": 280,
+      "2horas": 500
+    },
+    "pix_chave": "emilia@guiavip"
   },
   {
     "id": 23,
@@ -204,7 +380,15 @@
     "cidade": "Cuiabá",
     "descricao": "Experiência de classe alta e discrição garantida.",
     "foto_original": "images (22).jpeg",
-    "url_amigavel": "perfil-flávia-23"
+    "url_amigavel": "perfil-flávia-23",
+    "telegram": "flavia_vip",
+    "email": "flavia@guiavipbrasil.com",
+    "valores": {
+      "30min": 150,
+      "1hora": 280,
+      "2horas": 500
+    },
+    "pix_chave": "flávia@guiavip"
   },
   {
     "id": 24,
@@ -213,7 +397,15 @@
     "cidade": "Campo Grande",
     "descricao": "Profissional qualificada para acompanhamento VIP.",
     "foto_original": "images (23).jpeg",
-    "url_amigavel": "perfil-gisele-24"
+    "url_amigavel": "perfil-gisele-24",
+    "telegram": "gisele_vip",
+    "email": "gisele@guiavipbrasil.com",
+    "valores": {
+      "30min": 150,
+      "1hora": 280,
+      "2horas": 500
+    },
+    "pix_chave": "gisele@guiavip"
   },
   {
     "id": 25,
@@ -222,7 +414,15 @@
     "cidade": "Palmas",
     "descricao": "Dedicada a proporcionar momentos memoráveis.",
     "foto_original": "images (3).jpeg",
-    "url_amigavel": "perfil-heloísa-25"
+    "url_amigavel": "perfil-heloísa-25",
+    "telegram": "heloisa_vip",
+    "email": "heloisa@guiavipbrasil.com",
+    "valores": {
+      "30min": 150,
+      "1hora": 280,
+      "2horas": 500
+    },
+    "pix_chave": "heloísa@guiavip"
   },
   {
     "id": 26,
@@ -231,7 +431,15 @@
     "cidade": "Boa Vista",
     "descricao": "Elegância, beleza e profissionalismo em um só lugar.",
     "foto_original": "images (4).jpeg",
-    "url_amigavel": "perfil-iris-26"
+    "url_amigavel": "perfil-iris-26",
+    "telegram": "iris_vip",
+    "email": "iris@guiavipbrasil.com",
+    "valores": {
+      "30min": 150,
+      "1hora": 280,
+      "2horas": 500
+    },
+    "pix_chave": "iris@guiavip"
   },
   {
     "id": 27,
@@ -240,7 +448,15 @@
     "cidade": "Macapá",
     "descricao": "Acompanhante exclusiva para momentos especiais.",
     "foto_original": "images (5).jpeg",
-    "url_amigavel": "perfil-joana-27"
+    "url_amigavel": "perfil-joana-27",
+    "telegram": "joana_vip",
+    "email": "joana@guiavipbrasil.com",
+    "valores": {
+      "30min": 150,
+      "1hora": 280,
+      "2horas": 500
+    },
+    "pix_chave": "joana@guiavip"
   },
   {
     "id": 28,
@@ -249,7 +465,15 @@
     "cidade": "Rio Branco",
     "descricao": "Elegante e sofisticada, sempre pronta para experiências inesquecíveis.",
     "foto_original": "images (6).jpeg",
-    "url_amigavel": "perfil-karla-28"
+    "url_amigavel": "perfil-karla-28",
+    "telegram": "karla_vip",
+    "email": "karla@guiavipbrasil.com",
+    "valores": {
+      "30min": 150,
+      "1hora": 280,
+      "2horas": 500
+    },
+    "pix_chave": "karla@guiavip"
   },
   {
     "id": 29,
@@ -258,7 +482,15 @@
     "cidade": "Vitória",
     "descricao": "Profissional dedicada ao seu bem-estar e satisfação.",
     "foto_original": "images (7).jpeg",
-    "url_amigavel": "perfil-lúcia-29"
+    "url_amigavel": "perfil-lúcia-29",
+    "telegram": "lucia_vip",
+    "email": "lucia@guiavipbrasil.com",
+    "valores": {
+      "30min": 150,
+      "1hora": 280,
+      "2horas": 500
+    },
+    "pix_chave": "lúcia@guiavip"
   },
   {
     "id": 30,
@@ -267,7 +499,15 @@
     "cidade": "Florianópolis",
     "descricao": "Discreta, educada e com total comprometimento.",
     "foto_original": "images (8).jpeg",
-    "url_amigavel": "perfil-marina-30"
+    "url_amigavel": "perfil-marina-30",
+    "telegram": "marina_vip",
+    "email": "marina@guiavipbrasil.com",
+    "valores": {
+      "30min": 150,
+      "1hora": 280,
+      "2horas": 500
+    },
+    "pix_chave": "marina@guiavip"
   },
   {
     "id": 31,
@@ -276,7 +516,15 @@
     "cidade": "Blumenau",
     "descricao": "Oferecendo momentos de luxo e conforto.",
     "foto_original": "images (9).jpeg",
-    "url_amigavel": "perfil-nathalia-31"
+    "url_amigavel": "perfil-nathalia-31",
+    "telegram": "nathalia_vip",
+    "email": "nathalia@guiavipbrasil.com",
+    "valores": {
+      "30min": 150,
+      "1hora": 280,
+      "2horas": 500
+    },
+    "pix_chave": "nathalia@guiavip"
   },
   {
     "id": 32,
@@ -285,7 +533,15 @@
     "cidade": "Joinville",
     "descricao": "Atenciosa e carismática, pronta para surpreender.",
     "foto_original": "prompthero-prompt-7bd407a328e.webp",
-    "url_amigavel": "perfil-ofélia-32"
+    "url_amigavel": "perfil-ofélia-32",
+    "telegram": "ofelia_vip",
+    "email": "ofelia@guiavipbrasil.com",
+    "valores": {
+      "30min": 150,
+      "1hora": 280,
+      "2horas": 500
+    },
+    "pix_chave": "ofélia@guiavip"
   },
   {
     "id": 33,
@@ -294,6 +550,14 @@
     "cidade": "Londrina",
     "descricao": "Experiência de classe alta e discrição garantida.",
     "foto_original": "t67f001068e299_h.webp",
-    "url_amigavel": "perfil-priscila-33"
+    "url_amigavel": "perfil-priscila-33",
+    "telegram": "priscila_vip",
+    "email": "priscila@guiavipbrasil.com",
+    "valores": {
+      "30min": 150,
+      "1hora": 280,
+      "2horas": 500
+    },
+    "pix_chave": "priscila@guiavip"
   }
 ]
