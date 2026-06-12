@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, MessageCircle, X, Send, MapPin, ShieldCheck, Clock } from "lucide-react";
 import { MetaTags } from "@/components/MetaTags";
 import { profileExtensions } from "../profileExtensions";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 interface Perfil {
   id: number;
@@ -120,6 +120,13 @@ export default function Perfil() {
   const [pixCopiado, setPixCopiado] = useState(false);
   const { pathname } = useLocation();
   const urlCompleta = `${window.location.origin}${pathname}`;
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [mensagens, chatAberto]);
 
   useEffect(() => {
     fetch("/perfis.json")
@@ -304,7 +311,7 @@ export default function Perfil() {
                 </button>
               </div>
 
-              <div className="chat-messages">
+              <div className="chat-messages" ref={scrollRef}>
                 {mensagens.map((msg, idx) => (
                   <div key={idx} className={`chat-message ${msg.tipo === "usuario" ? "usuario" : "assistente"}`}>
                     {msg.texto}
