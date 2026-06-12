@@ -13,6 +13,7 @@ interface Perfil {
   descricao: string;
   foto_original: string;
   url_amigavel: string;
+  valores?: { "30min": number; "1hora": number; "2horas": number };
 }
 
 type Mensagem = { tipo: "usuario" | "assistente"; texto: string };
@@ -229,6 +230,26 @@ export default function Perfil() {
               <p className="mb-2 text-sm font-semibold uppercase tracking-[0.18em] text-accent">Sobre</p>
               <p className="leading-8 text-foreground/90">{perfil.descricao}</p>
             </div>
+
+            {perfil.valores && (
+              <div className="rounded-2xl border border-accent/30 bg-accent/5 p-5">
+                <p className="mb-4 text-sm font-semibold uppercase tracking-[0.18em] text-accent">Tabela de Valores</p>
+                <div className="grid gap-3 sm:grid-cols-3">
+                  <div className="rounded-lg border border-accent/20 bg-accent/10 p-3 text-center">
+                    <p className="text-xs font-semibold text-muted-foreground">30 minutos</p>
+                    <p className="mt-2 text-2xl font-bold text-accent">R$ {perfil.valores["30min"]}</p>
+                  </div>
+                  <div className="rounded-lg border border-accent/20 bg-accent/10 p-3 text-center">
+                    <p className="text-xs font-semibold text-muted-foreground">1 hora</p>
+                    <p className="mt-2 text-2xl font-bold text-accent">R$ {perfil.valores["1hora"]}</p>
+                  </div>
+                  <div className="rounded-lg border border-accent/20 bg-accent/10 p-3 text-center">
+                    <p className="text-xs font-semibold text-muted-foreground">2 horas</p>
+                    <p className="mt-2 text-2xl font-bold text-accent">R$ {perfil.valores["2horas"]}</p>
+                  </div>
+                </div>
+              </div>
+            )}
 
             <div className="rounded-2xl border border-white/10 bg-black/25 p-5 text-sm leading-7 text-muted-foreground">
               <div className="mb-2 flex items-center gap-2 font-semibold text-foreground"><Clock className="h-4 w-4 text-accent" />Dica para contato</div>
