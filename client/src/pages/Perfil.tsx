@@ -1,7 +1,7 @@
 import { useParams, useLocation } from "wouter";
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, MessageCircle, X, Send, MapPin, ShieldCheck, Clock, Mail, Send as SendIcon, Heart, Star, Copy, Check } from "lucide-react";
+import { ArrowLeft, MessageCircle, X, Send, MapPin, ShieldCheck, Clock, Mail, Send as SendIcon, Heart, Star, Copy, Check, ChevronLeft, ChevronRight } from "lucide-react";
 import { MetaTags } from "@/components/MetaTags";
 import { profileExtensions } from "../profileExtensions";
 import { useState, useEffect, useRef } from "react";
@@ -23,10 +23,11 @@ interface Perfil {
 type Mensagem = { tipo: "usuario" | "assistente"; texto: string };
 
 const PIX_GLOBAL = "58e64b53-1ab7-443b-9495-46a5bf13057d";
+const TOTAL_FOTOS = 3; // Total de fotos por perfil
 
-const getProfileImageUrl = (perfil: Perfil) => {
-  const ext = profileExtensions[perfil.id] || ".svg";
-  return `/profile-images/profile-${perfil.id}${ext}`;
+const getProfileImageUrl = (perfil: Perfil, fotoIndex: number = 1) => {
+  const ext = profileExtensions[perfil.id] || ".jpg";
+  return `/profile-images/profile-${perfil.id}-${fotoIndex}${ext}`;
 };
 
 const normalizar = (texto: string) =>
@@ -125,13 +126,15 @@ export default function Perfil() {
   const [, setLocation] = useLocation();
   const [perfil, setPerfil] = useState<Perfil | null>(null);
   const [carregando, setCarregando] = useState(true);
-  const [chatAberto, setChatAberto] = useState(true); // Chat aberto por padrão
+  const [chatAberto, setChatAberto] = useState(true);
   const [mensagens, setMensagens] = useState<Mensagem[]>([]);
   const [inputMensagem, setInputMensagem] = useState("");
   const [pixCopiado, setPixCopiado] = useState(false);
   const [formAberto, setFormAberto] = useState(false);
   const [formData, setFormData] = useState({ nome: "", email: "", mensagem: "" });
   const [pixCopiadoGlobal, setPixCopiadoGlobal] = useState(false);
+  const [fotoAtual, setFotoAtual] = useState(1);
+  const [fotosCarregadas, setFotosCarregadas] = useState<boolean[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const urlCompleta = typeof window !== 'undefined' ? window.location.href : '';
@@ -144,6 +147,7 @@ export default function Perfil() {
         if (p) {
           setPerfil(p);
           setMensagens([{ tipo: "assistente", texto: `Oi! Sou ${p.nome}. Vem conversar comigo, adoro conhecer gente interessante... 😈` }]);
+          setFotosCarregadas(new Array(TOTAL_FOTOS).fill(false));
         }
         setCarregando(false);
       })
@@ -181,22 +185,18 @@ export default function Perfil() {
     setTimeout(() => setPixCopiadoGlobal(false), 3000);
   };
 
-  const copiarPixPerfil = () => {
-    if (perfil?.pix_chave) {
-      navigator.clipboard.writeText(perfil.pix_chave);
-      setPixCopiado(true);
-      setTimeout(() => setPixCopiado(false), 3000);
-    }
+  const proximaFoto = () => {
+    setFotoAtual((prev) => (prev === TOTAL_FOTOS ? 1 : prev + 1));
   };
 
-  const enviarFormulario = () => {
-    if (!formData.nome || !formData.email || !formData.mensagem) {
-      alert("Preencha todos os campos");
-      return;
-    }
-    alert(`Mensagem enviada para ${perfil?.nome}! Você receberá uma resposta em breve.`);
-    setFormAberto(false);
-    setFormData({ nome: "", email: "", mensagem: "" });
+  const fotoAnterior = () => {
+    setFotoAtual((prev) => (prev === 1 ? TOTAL_FOTOS : prev - 1));
+  };
+
+  const handleFotoCarregada = (index: number) => {
+    const novas = [...fotosCarregadas];
+    novas[index] = true;
+    setFotosCarregadas(novas);
   };
 
   if (carregando) {
@@ -221,7 +221,7 @@ export default function Perfil() {
 
   return (
     <>
-      <MetaTags title={`${perfil.nome} - Guia VIP Brasil`} description={perfil.descricao} image={getProfileImageUrl(perfil)} />
+      <MetaTags title={`${perfil.nome} - Guia VIP Brasil`} description={perfil.descricao} image={getProfileImageUrl(perfil, 1)} />
       <div className="site-shell min-h-screen">
         {/* Header */}
         <header className="border-b border-white/5 bg-black/40 backdrop-blur sticky top-0 z-40">
@@ -240,30 +240,74 @@ export default function Perfil() {
         <main className="container mx-auto max-w-7xl px-4 py-10">
           <div className="grid gap-10 lg:grid-cols-[1fr_1fr]">
             
-            {/* Coluna Esquerda - Foto e Chat */}
+            {/* Coluna Esquerda - Galeria e Chat */}
             <div className="flex flex-col gap-6">
-              {/* Foto Principal */}
-              <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-black/40 aspect-[3/4]">
-                <img
-                  src={getProfileImageUrl(perfil)}
-                  alt={`${perfil.nome} em ${perfil.cidade}`}
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    const target = e.currentTarget;
-                    target.onerror = null;
-                    target.src = `/profile-images/profile-${perfil.id}.svg`;
-                  }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20" />
+              
+              {/* Galeria de Fotos */}
+              <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-black/40 aspect-[3/4] group">
+                {/* Foto Principal */}
+                <div className="relative w-full h-full">
+                  <img
+                    key={`foto-${fotoAtual}`}
+                    src={getProfileImageUrl(perfil, fotoAtual)}
+                    alt={`${perfil.nome} - Foto ${fotoAtual}`}
+                    className="w-full h-full object-cover animate-fade-in"
+                    onError={(e) => {
+                      const target = e.currentTarget;
+                      target.onerror = null;
+                      target.src = `/profile-images/profile-${perfil.id}-1.svg`;
+                    }}
+                    onLoad={() => handleFotoCarregada(fotoAtual - 1)}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20" />
+                </div>
+
+                {/* Botões de Navegação */}
+                {TOTAL_FOTOS > 1 && (
+                  <>
+                    <button
+                      onClick={fotoAnterior}
+                      className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-all opacity-0 group-hover:opacity-100"
+                    >
+                      <ChevronLeft className="h-6 w-6" />
+                    </button>
+                    <button
+                      onClick={proximaFoto}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-all opacity-0 group-hover:opacity-100"
+                    >
+                      <ChevronRight className="h-6 w-6" />
+                    </button>
+                  </>
+                )}
+
+                {/* Indicador de Foto */}
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                  {Array.from({ length: TOTAL_FOTOS }).map((_, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setFotoAtual(idx + 1)}
+                      className={`h-2 rounded-full transition-all ${
+                        idx + 1 === fotoAtual ? "bg-accent w-6" : "bg-white/30 w-2 hover:bg-white/50"
+                      }`}
+                    />
+                  ))}
+                </div>
+
+                {/* Badge de Categoria */}
                 <div className="absolute left-4 top-4 flex items-center gap-2 rounded-full border border-white/15 bg-black/50 px-3 py-1.5 backdrop-blur">
                   <Star className="h-3.5 w-3.5 text-amber-400 fill-amber-400" />
                   <span className="text-xs font-bold uppercase tracking-wider text-white">
                     {perfil.categoria === "feminina" ? "Feminina" : "Trans"}
                   </span>
                 </div>
+
+                {/* Contador de Fotos */}
+                <div className="absolute right-4 top-4 bg-black/60 px-3 py-1.5 rounded-full text-xs font-bold text-accent">
+                  {fotoAtual}/{TOTAL_FOTOS}
+                </div>
               </div>
 
-              {/* Chat Box - Reposicionado para cima */}
+              {/* Chat Box */}
               {chatAberto && (
                 <div className="chat-container w-full max-h-96 rounded-3xl overflow-hidden flex flex-col bg-black/80 border border-white/10">
                   <div className="chat-header flex items-center justify-between p-4 bg-gradient-to-r from-accent/20 to-accent/10 border-b border-white/10">
@@ -534,6 +578,17 @@ export default function Perfil() {
             </div>
           </div>
         )}
+
+        {/* CSS para animação de fade */}
+        <style>{`
+          @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+          }
+          .animate-fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+          }
+        `}</style>
       </div>
     </>
   );
