@@ -54,67 +54,64 @@ export default function Home() {
   const totalTrans = perfis.filter((p) => p.categoria === "trans").length;
 
   return (
-    <div className="site-shell min-h-screen bg-background">
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-black/70 backdrop-blur-xl">
-        <div className="container py-4">
-          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <div>
-              <p className="eyebrow">Curadoria premium em todo o Brasil</p>
-              <h1 className="text-3xl font-bold text-foreground md:text-4xl" style={{ fontFamily: "'Playfair Display', serif" }}>
-                Guia VIP Brasil
-              </h1>
+    <div className="site-shell min-h-screen">
+      <header className="hero-gradient border-b border-white/10 py-20 text-center">
+        <div className="container">
+          <p className="eyebrow mb-4">Curadoria premium em todo o Brasil</p>
+          <h1 className="hero-title mb-6">Guia VIP Brasil</h1>
+          <p className="hero-subtitle mb-10">Perfis organizados por cidade e categoria</p>
+          
+          <div className="flex flex-wrap justify-center gap-6">
+            <div className="stat-card">
+              <span className="stat-value">{perfis.length}</span>
+              <span className="stat-label">perfis</span>
             </div>
-            <div className="hidden items-center gap-3 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-muted-foreground md:flex">
-              <ShieldCheck className="h-4 w-4 text-accent" />
-              Perfis organizados por cidade e categoria
+            <div className="stat-card">
+              <span className="stat-value">{totalFemininas}</span>
+              <span className="stat-label">femininas</span>
+            </div>
+            <div className="stat-card">
+              <span className="stat-value">{totalTrans}</span>
+              <span className="stat-label">trans</span>
             </div>
           </div>
         </div>
       </header>
 
-      <section className="hero-section">
-        <div className="container py-14 md:py-20">
-          <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
-            <div>
-              <p className="eyebrow mb-4">Portal de acompanhantes de luxo</p>
-              <h2 className="max-w-4xl text-4xl font-bold leading-tight text-foreground md:text-6xl" style={{ fontFamily: "'Playfair Display', serif" }}>
-                Encontre perfis VIP com uma experiência mais bonita, rápida e confiável.
-              </h2>
-              <p className="mt-5 max-w-2xl text-base leading-8 text-muted-foreground md:text-lg">
-                Navegue por perfis selecionados, filtre por categoria, pesquise por cidade e converse pelo assistente virtual de cada perfil.
-              </p>
-              <div className="mt-8 grid gap-3 sm:grid-cols-3">
-                <div className="stat-card"><strong>{perfis.length}</strong><span>perfis</span></div>
-                <div className="stat-card"><strong>{totalFemininas}</strong><span>femininas</span></div>
-                <div className="stat-card"><strong>{totalTrans}</strong><span>trans</span></div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      <section className="border-y border-white/10 bg-black/35">
+      <section className="sticky top-0 z-10 border-b border-white/10 bg-black/35 backdrop-blur-md">
         <div className="container py-6">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div className="search-box">
               <Search className="h-4 w-4 text-muted-foreground" />
               <input
                 value={busca}
-                onChange={(event) => setBusca(event.target.value)}
+                onChange={(e) => setBusca(e.target.value)}
                 placeholder="Buscar por nome, cidade ou descrição..."
                 className="w-full bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
               />
             </div>
+
             <div className="flex flex-wrap items-center gap-2">
               <span className="mr-1 text-sm font-semibold text-muted-foreground">Filtrar:</span>
-              <Button variant={filtro === "todos" ? "default" : "outline"} onClick={() => setFiltro("todos")} className="rounded-full">
+              <Button
+                variant={filtro === "todos" ? "default" : "outline"}
+                onClick={() => setFiltro("todos")}
+                className="rounded-full"
+              >
                 Todos ({perfis.length})
               </Button>
-              <Button variant={filtro === "feminina" ? "default" : "outline"} onClick={() => setFiltro("feminina")} className="rounded-full">
+              <Button
+                variant={filtro === "feminina" ? "default" : "outline"}
+                onClick={() => setFiltro("feminina")}
+                className="rounded-full"
+              >
                 Femininas ({totalFemininas})
               </Button>
-              <Button variant={filtro === "trans" ? "default" : "outline"} onClick={() => setFiltro("trans")} className="rounded-full">
+              <Button
+                variant={filtro === "trans" ? "default" : "outline"}
+                onClick={() => setFiltro("trans")}
+                className="rounded-full"
+              >
                 Trans ({totalTrans})
               </Button>
             </div>
@@ -124,9 +121,13 @@ export default function Home() {
 
       <section className="container py-12">
         {carregando ? (
-          <div className="empty-state"><p>Carregando perfis...</p></div>
+          <div className="empty-state">
+            <p>Carregando perfis...</p>
+          </div>
         ) : perfisFiltrados.length === 0 ? (
-          <div className="empty-state"><p>Nenhum perfil encontrado para sua busca.</p></div>
+          <div className="empty-state">
+            <p>Nenhum perfil encontrado para sua busca.</p>
+          </div>
         ) : (
           <div className="grid grid-cols-1 gap-7 md:grid-cols-2">
             {perfisFiltrados.map((perfil) => (
@@ -161,6 +162,35 @@ export default function Home() {
           </div>
         )}
       </section>
+
+      {/* Rodapé Profissional */}
+      <footer className="border-t border-white/10 bg-black/60 backdrop-blur py-12 mt-16">
+        <div className="container">
+          <div className="grid gap-8 md:grid-cols-3 mb-8">
+            <div>
+              <h3 className="text-lg font-bold text-foreground mb-3">Guia VIP Brasil</h3>
+              <p className="text-sm text-muted-foreground">Portal premium de acompanhantes de luxo em todo o Brasil. Discrição e profissionalismo garantidos.</p>
+            </div>
+            <div>
+              <h4 className="text-sm font-bold text-accent mb-3 uppercase">Informações</h4>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li><a href="#" className="hover:text-accent transition-colors">Termos de Uso</a></li>
+                <li><a href="#" className="hover:text-accent transition-colors">Política de Privacidade</a></li>
+                <li><a href="#" className="hover:text-accent transition-colors">Contato</a></li>
+              </ul>
+            </div>
+            <div>
+              <div className="rounded-lg border border-red-500/30 bg-red-500/10 p-4">
+                <p className="text-xs font-bold text-red-400 uppercase tracking-wider mb-2">⚠️ Aviso Importante</p>
+                <p className="text-xs text-red-300">Este site é destinado exclusivamente a maiores de 18 anos. Ao acessar, você confirma ser maior de idade.</p>
+              </div>
+            </div>
+          </div>
+          <div className="border-t border-white/10 pt-8">
+            <p className="text-center text-xs text-muted-foreground">© 2026 Guia VIP Brasil. Todos os direitos reservados. | Conteúdo adulto - Proibido para menores de 18 anos.</p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

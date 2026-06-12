@@ -1,4 +1,5 @@
 import { useParams, useLocation } from "wouter";
+import React from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, MessageCircle, X, Send, MapPin, ShieldCheck, Clock } from "lucide-react";
 import { MetaTags } from "@/components/MetaTags";
@@ -98,96 +99,84 @@ function gerarResposta(perfil: Perfil, mensagem: string) {
     return `Posso ir no seu lugar ou você vem aqui. Tanto faz, desde que a gente fique sozinho pra fazer putaria! 😈`;
   }
 
-  const respostasGerais = [
-    `Oi, tudo bem? Quer saber mais sobre mim? Sou uma gata que adora sexo e estou aqui pra você se divertir! 🔥`,
-    `Me faz uma pergunta que eu respondo! Quer saber sobre valores, disponibilidade ou como a gente faz? 😏`,
-    `Estou aqui e pronta pra te deixar louco! Quer marcar um encontro gostoso? 💦`,
-    `Que tal a gente parar de conversa e partir pra ação? Manda um PIX e vem me ver! 🍆`,
-    `Adoro conversar, mas o que eu mais gosto é de ação! Bora marcar? 😈`
-  ];
-
-  return respostasGerais[Math.floor(Math.random() * respostasGerais.length)];
+  return `Interessante... me conta mais sobre isso? 😏 Ou quer marcar logo um horário pra gente se divertir? 🔥`;
 }
 
 export default function Perfil() {
-  const { url: id } = useParams();
+  const { url_amigavel } = useParams();
+  const [, setLocation] = useLocation();
   const [perfil, setPerfil] = useState<Perfil | null>(null);
   const [carregando, setCarregando] = useState(true);
-  const [erro, setErro] = useState(false);
   const [chatAberto, setChatAberto] = useState(false);
   const [mensagens, setMensagens] = useState<Mensagem[]>([]);
   const [inputMensagem, setInputMensagem] = useState("");
   const [pixCopiado, setPixCopiado] = useState(false);
-  const { pathname } = useLocation();
-  const urlCompleta = `${window.location.origin}${pathname}`;
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }
-  }, [mensagens, chatAberto]);
+  const urlCompleta = typeof window !== 'undefined' ? window.location.href : '';
 
   useEffect(() => {
     fetch("/perfis.json")
       .then((res) => res.json())
-      .then((perfis: Perfil[]) => {
-        const encontrado = perfis.find((p) => p.url_amigavel === id);
-        if (encontrado) {
-          setPerfil(encontrado);
-          setMensagens([
-            {
-              tipo: "assistente",
-              texto: `Oi! Sou ${encontrado.nome}. Pergunte sobre disponibilidade, cidade, contato, discrição ou detalhes do perfil.`,
-            },
-          ]);
-        } else {
-          setErro(true);
+      .then((data: Perfil[]) => {
+        const p = data.find((item) => item.url_amigavel === url_amigavel);
+        if (p) {
+          setPerfil(p);
+          setMensagens([{ tipo: "assistente", texto: `Olá! Sou ${p.nome}. Como posso te deixar louco hoje? 😈` }]);
         }
         setCarregando(false);
       })
       .catch((err) => {
         console.error("Erro ao carregar perfil:", err);
-        setErro(true);
         setCarregando(false);
       });
-  }, [id]);
+  }, [url_amigavel]);
 
-  const enviarMensagem = (textoPersonalizado?: string) => {
-    if (!perfil) return;
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [mensagens]);
 
-    const texto = (textoPersonalizado ?? inputMensagem).trim();
-    if (!texto) return;
+  const enviarMensagem = (textoOverride?: string) => {
+    const texto = textoOverride || inputMensagem;
+    if (!texto.trim()) return;
 
-    setMensagens((prev) => [...prev, { tipo: "usuario", texto }]);
+    const novasMensagens: Mensagem[] = [...mensagens, { tipo: "usuario", texto }];
+    setMensagens(novasMensagens);
     setInputMensagem("");
 
-    window.setTimeout(() => {
-      setMensagens((prev) => [...prev, { tipo: "assistente", texto: gerarResposta(perfil, texto) }]);
-    }, 500);
+    setTimeout(() => {
+      if (perfil) {
+        setMensagens([...novasMensagens, { tipo: "assistente", texto: gerarResposta(perfil, texto) }]);
+      }
+    }, 1000);
   };
 
   const copiarPix = () => {
-    navigator.clipboard.writeText(perfil?.pix_chave || "52295826-c5c1-4577-a7b0-88dcde648f71");
-    setPixCopiado(true);
-    setTimeout(() => setPixCopiado(false), 2000);
+    if (perfil?.pix_chave) {
+      navigator.clipboard.writeText(perfil.pix_chave);
+      setPixCopiado(true);
+      setTimeout(() => setPixCopiado(false), 3000);
+    }
   };
 
   if (carregando) {
     return (
-      <div className="site-shell flex min-h-screen items-center justify-center bg-background">
-        <p className="text-muted-foreground">Carregando perfil...</p>
+      <div className="flex min-h-screen items-center justify-center bg-black text-white">
+        <p className="animate-pulse text-xl font-bold uppercase tracking-widest text-accent">Carregando...</p>
       </div>
     );
   }
 
-  if (erro || !perfil) {
+  if (!perfil) {
     return (
-      <div className="site-shell flex min-h-screen items-center justify-center bg-background">
-        <div className="text-center">
-          <p className="mb-4 text-2xl font-bold text-foreground">Perfil não encontrado</p>
-          <Button onClick={() => window.history.back()}>Voltar</Button>
-        </div>
+      <div className="flex min-h-screen flex-col items-center justify-center bg-black p-6 text-center text-white">
+        <h1 className="mb-4 text-4xl font-bold">Perfil não encontrado</h1>
+        <p className="mb-8 text-muted-foreground">O perfil que você está procurando não existe ou foi removido.</p>
+        <Button onClick={() => setLocation("/")} className="btn-primary px-8">
+          Voltar ao Início
+        </Button>
       </div>
     );
   }
@@ -224,9 +213,15 @@ export default function Perfil() {
             <div className="flex flex-col gap-6 p-1 md:p-3">
               <div>
                 <p className="eyebrow mb-3">Perfil VIP</p>
-                <h1 className="text-4xl font-bold text-foreground md:text-6xl" style={{ fontFamily: "'Playfair Display', serif" }}>
-                  {perfil.nome}
-                </h1>
+                <div className="flex items-center gap-3">
+                  <h1 className="text-4xl font-bold text-foreground md:text-6xl" style={{ fontFamily: "'Playfair Display', serif" }}>
+                    {perfil.nome}
+                  </h1>
+                  <div className="flex items-center gap-1 rounded-full bg-gradient-to-r from-yellow-500 to-amber-500 px-3 py-1 text-xs font-bold text-black uppercase tracking-wider">
+                    <span>✓</span>
+                    <span>Verificado</span>
+                  </div>
+                </div>
                 <div className="accent-line mt-5" />
               </div>
 
@@ -303,15 +298,15 @@ export default function Perfil() {
 
         {chatAberto && (
           <div className="fixed inset-0 z-50 flex items-end bg-black/60 backdrop-blur-sm md:items-center md:justify-center">
-            <div className="chat-container w-full max-w-md max-h-96 md:rounded-3xl">
-              <div className="chat-header flex items-center justify-between">
+            <div className="chat-container w-full max-w-md max-h-[80vh] md:rounded-3xl overflow-hidden flex flex-col">
+              <div className="chat-header flex items-center justify-between p-4 bg-pink-900/40">
                 <h3 className="text-pink-300 font-bold">{perfil.nome}</h3>
                 <button onClick={() => setChatAberto(false)} className="text-pink-300 hover:text-pink-100 transition-colors">
                   <X className="h-5 w-5" />
                 </button>
               </div>
 
-              <div className="chat-messages" ref={scrollRef}>
+              <div className="chat-messages flex-1 overflow-y-auto p-4" ref={scrollRef}>
                 {mensagens.map((msg, idx) => (
                   <div key={idx} className={`chat-message ${msg.tipo === "usuario" ? "usuario" : "assistente"}`}>
                     {msg.texto}
@@ -319,15 +314,15 @@ export default function Perfil() {
                 ))}
               </div>
 
-              <div className="chat-input-area">
-                <div className="chat-input">
+              <div className="chat-input-area p-4 bg-black/40 border-t border-white/10">
+                <div className="chat-input flex gap-2">
                   <input
                     type="text"
                     value={inputMensagem}
                     onChange={(e) => setInputMensagem(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && enviarMensagem()}
                     placeholder="Escreva algo sexy..."
-                    className="chat-input input"
+                    className="flex-1 bg-white/5 border border-white/10 rounded-full px-4 py-2 text-sm outline-none focus:border-pink-500"
                   />
                   <button onClick={() => enviarMensagem()} className="rounded-full bg-pink-600 hover:bg-pink-700 p-2 text-white transition-colors">
                     <Send className="h-4 w-4" />
@@ -335,7 +330,7 @@ export default function Perfil() {
                 </div>
 
                 {sugestoes.length > 0 && (
-                  <div className="chat-suggestions">
+                  <div className="chat-suggestions flex flex-wrap gap-2 mt-3">
                     {sugestoes.map((sugestao, idx) => (
                       <button
                         key={idx}
@@ -343,7 +338,7 @@ export default function Perfil() {
                           setInputMensagem(sugestao);
                           setTimeout(() => enviarMensagem(sugestao), 0);
                         }}
-                        className="chat-suggestion-btn"
+                        className="text-xs bg-white/5 hover:bg-white/10 border border-white/10 rounded-full px-3 py-1 text-muted-foreground transition-colors"
                       >
                         {sugestao}
                       </button>
@@ -354,6 +349,35 @@ export default function Perfil() {
             </div>
           </div>
         )}
+
+        {/* Rodapé Profissional */}
+        <footer className="border-t border-white/10 bg-black/60 backdrop-blur py-12 mt-16">
+          <div className="container">
+            <div className="grid gap-8 md:grid-cols-3 mb-8">
+              <div>
+                <h3 className="text-lg font-bold text-foreground mb-3">Guia VIP Brasil</h3>
+                <p className="text-sm text-muted-foreground">Portal premium de acompanhantes de luxo em todo o Brasil. Discrição e profissionalismo garantidos.</p>
+              </div>
+              <div>
+                <h4 className="text-sm font-bold text-accent mb-3 uppercase">Informações</h4>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li><a href="#" className="hover:text-accent transition-colors">Termos de Uso</a></li>
+                  <li><a href="#" className="hover:text-accent transition-colors">Política de Privacidade</a></li>
+                  <li><a href="#" className="hover:text-accent transition-colors">Contato</a></li>
+                </ul>
+              </div>
+              <div>
+                <div className="rounded-lg border border-red-500/30 bg-red-500/10 p-4">
+                  <p className="text-xs font-bold text-red-400 uppercase tracking-wider mb-2">⚠️ Aviso Importante</p>
+                  <p className="text-xs text-red-300">Este site é destinado exclusivamente a maiores de 18 anos. Ao acessar, você confirma ser maior de idade.</p>
+                </div>
+              </div>
+            </div>
+            <div className="border-t border-white/10 pt-8">
+              <p className="text-center text-xs text-muted-foreground">© 2026 Guia VIP Brasil. Todos os direitos reservados. | Conteúdo adulto - Proibido para menores de 18 anos.</p>
+            </div>
+          </div>
+        </footer>
       </div>
     </>
   );
