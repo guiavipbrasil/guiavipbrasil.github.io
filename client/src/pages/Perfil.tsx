@@ -13,6 +13,7 @@ interface Perfil {
   cidade: string;
   descricao: string;
   foto_original: string;
+  video?: string;
   url_amigavel: string;
   valores?: { "30min": number; "1hora": number; "2horas": number };
   pix_chave?: string;
@@ -250,22 +251,35 @@ export default function Perfil() {
             {/* Coluna Esquerda - Galeria e Chat */}
             <div className="flex flex-col gap-6">
               
-              {/* Galeria de Fotos */}
+              {/* Galeria de Fotos e Vídeo */}
               <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-black/40 group">
-                {/* Foto Principal */}
+                {/* Conteúdo Principal (Vídeo ou Foto) */}
                 <div className="relative w-full">
-                  <img
-                    key={`foto-${fotoAtual}`}
-                    src={getProfileImageUrl(perfil, fotoAtual)}
-                    alt={`${perfil.nome} - Foto ${fotoAtual}`}
-                    className="w-full h-auto block animate-fade-in"
-                    onError={(e) => {
-                      const target = e.currentTarget;
-                      target.onerror = null;
-                      target.src = `/profile-images/profile-${perfil.id}.svg`;
-                    }}
-                    onLoad={() => handleFotoCarregada(fotoAtual - 1)}
-                  />
+                  {perfil.video ? (
+                    <video
+                      key={`video-${perfil.id}`}
+                      src={`/profile-videos/${perfil.video}`}
+                      className="w-full h-auto block animate-fade-in"
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      controls
+                    />
+                  ) : (
+                    <img
+                      key={`foto-${fotoAtual}`}
+                      src={getProfileImageUrl(perfil, fotoAtual)}
+                      alt={`${perfil.nome} - Foto ${fotoAtual}`}
+                      className="w-full h-auto block animate-fade-in"
+                      onError={(e) => {
+                        const target = e.currentTarget;
+                        target.onerror = null;
+                        target.src = `/profile-images/profile-${perfil.id}.svg`;
+                      }}
+                      onLoad={() => handleFotoCarregada(fotoAtual - 1)}
+                    />
+                  )}
                   <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black/70 to-transparent" />
                 </div>
 
